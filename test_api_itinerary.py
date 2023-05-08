@@ -1,6 +1,7 @@
 import traceback
 from util import delete_itinerary_in_database, get_current_datetime_in_SQL_DATETIME_format
 from fastapi.testclient import TestClient
+from fastapi import FastAPI, HTTPException
 from api_application import app
 import API_path_values
 import json

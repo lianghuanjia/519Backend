@@ -10,6 +10,7 @@ from database import get_session
 from itinerary import check_one_place_format, check_places_format, check_datetime
 import API_path_values
 
+
 app = FastAPI()
 
 User_HTTPResponse_400_DETAIL = {
@@ -58,13 +59,15 @@ Itinerary_HTTPResponse_400_DETAIL = {
     "INVALID_DATETIME_FORMAT":{"status code":400, "message":"Invalid created_time format"},
     "INVALID_ITINERARY_NAME": {"status code":400, "message":"Invalid itinerary name: it can't be an empty string"},
     "INVALID_DATETIME_EMPTY_STRING":{"status code":400, "message":"Invalid created_time: it can't be an empty string"},
-    "SINGLE_ITINERARY_NOT_FOUND":{"status code":400, "message":"Single itinerary not found"}
+    "SINGLE_ITINERARY_NOT_FOUND":{"status code":400, "message":"Single itinerary not found"},
+    "NO_DISPLAY_RESULT": {"status code": 400, "message": "Unable to calculate optimized solution"}
 }
 
 Itinerary_HTTPResponse_200_DETAIL = {
     "Add_ITINERARY_SUCCESS": {"status code": 200, "message":"Added itinerary successfully"},
     "GET_A_USER_ITINERARIES_SUCCESS":{"status code": 200, "message":"Successfully get a user's all itineraries"},
-    "USER_HAS_NO_ITINERARY": {"status code": 201, "message": "User has no itinerary"}
+    "USER_HAS_NO_ITINERARY": {"status code": 201, "message": "User has no itinerary"},
+    "GET_ITINERARY__OPTIMIZED_ROUTE_SUCCESS": {"status code":200, "message":"Successfully get an itinerary's optimized route"}
 }
 
 
@@ -134,7 +137,13 @@ def get_one_itinerary_and_its_optimized_path(str_itinerary_id: str, travel_mode:
         # print(itinerary_id)
         # print(travel_mode)
         # print(itinerary)
-        util.get_optimized_order(travel_mode, itinerary)
+        display_result = util.get_optimized_order(travel_mode, itinerary)
+        if not display_result:
+            return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["NO_DISPLAY_RESULT"])
+        else:
+            return_content = Itinerary_HTTPResponse_200_DETAIL["GET_ITINERARY__OPTIMIZED_ROUTE_SUCCESS"]
+            return_content["route"] = display_result
+            return JSONResponse(status_code=200, content=return_content)
     except Exception as err:
         print(err)
         raise HTTPException(status_code=500, detail='Internal Error')

@@ -2,6 +2,7 @@ from database import get_session
 from database_table_definition import User, Itinerary
 from datetime import datetime
 from itinerary import process_starting_point_and_destination, process_places
+from distance_matrix_calculation import get_locations_and_mode_to_get_display_result
 
 import ast
 def user_exists(target_email):
@@ -88,5 +89,25 @@ def get_optimized_order(travel_mode, db_itinerary):
     starting_point_info = process_starting_point_and_destination(db_itinerary.starting_point)[0]
     destination_info = process_starting_point_and_destination(db_itinerary.destination)[0]
     places_info_list = process_places(db_itinerary.places)
-    # optimized_route =
+    """
+    how it looks like:
+    {'place_name': 'Your Location', 'latitude': '42.3455898', 'longitude': '-71.0887769'}
+{'place_name': 'Boston Public Library - Central Library', 'latitude': '42.3493136', 'longitude': '-71.0781875'}
+[{'place_name': 'Park', 'latitude': '42.3465259', 'longitude': '-71.0822474'}, {'place_name': 'Cafe 939', 'latitude': '42.3481677', 'longitude': '-71.0849947'}]
 
+    =====
+    make it like this:
+    starting_point = ('Monmouth Street Park', 42.3453547, -71.1068336)
+    place1 = ('Museum of Fine Arts, Boston', 42.339381, -71.094048)
+    place2 = ('Caffè Bene', 42.3423715, -71.0847774)
+    destination = ('Gabel Museum of Archaeology', 42.3501187, -71.1037303)
+    """
+    starting_point = (starting_point_info['place_name'], float(starting_point_info['latitude']), float(starting_point_info['longitude']))
+    location_list = [starting_point]
+    for each_place in places_info_list:
+        location_list.append((each_place['place_name'], float(each_place['latitude']), float(each_place['longitude'])))
+
+    destination_point = (destination_info['place_name'], float(destination_info['latitude']), float(destination_info['longitude']))
+    location_list.append(destination_point)
+    display_info = get_locations_and_mode_to_get_display_result(location_list, travel_mode)
+    return display_info

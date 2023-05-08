@@ -56,3 +56,8 @@
 #
 #
 #
+import uvicorn
+import fastapi
+if __name__ == "__main__":
+    print(uvicorn.__version__)
+    print(fastapi.__version__)
