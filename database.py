@@ -20,7 +20,6 @@ def create_db_connection():
         print(e)
 
 
-
 def create_session():
     engine = create_db_connection()
     Base.metadata.create_all(engine)

@@ -21,10 +21,10 @@ class Itinerary(Base):
     __tablename__ = "itinerary"
 
     id = Column(Integer, autoincrement=True, primary_key=True)
-    user_email = Column(String(50), ForeignKey("user.email"))
-    starting_point = Column(String(45))
-    destination = Column(String(45))
-    places = Column(String(45), nullable=True)
-    itinerary_name = Column(String(45), nullable=True)
+    user_email = Column(String(100), ForeignKey("user.email"))
+    starting_point = Column(String(300))
+    destination = Column(String(300))
+    places = Column(String(2000), nullable=True)
+    itinerary_name = Column(String(600), nullable=True)
     created_time = Column(DATETIME, nullable=True)
 

@@ -1,11 +1,13 @@
 import ast
 from datetime import datetime
+from database import get_session
+from database_table_definition import Itinerary
 
 starting_point = "['Monmouth Street Park', '42.3453547', '-71.1068336']"
 destination = "['Gabel Museum of Archaeology', '42.3501187', '-71.1037303']"
 places = "['Museum of Fine Arts, Boston', '42.339381', '-71.094048', 'Caffè Bene', '42.3423715', '-71.0847774']"
 
-def process_add_itinerary_start_and_destination(a_place):
+def process_starting_point_and_destination(a_place):
     try:
         list_from_string = ast.literal_eval(a_place)
         processed_place_with_detail = get_all_places_with_their_lant_long(list_from_string)
@@ -13,7 +15,7 @@ def process_add_itinerary_start_and_destination(a_place):
     except Exception as err:
         print(err)
 
-def process_add_itinerary_places(all_places):
+def process_places(all_places):
     list_of_all_places = ast.literal_eval(all_places)
     categorized_places_list = get_all_places_with_their_lant_long(list_of_all_places)
     return categorized_places_list
@@ -76,6 +78,9 @@ def check_places_format(places_input):
 
 def check_datetime(datetime_input):
     return isinstance(datetime_input, datetime)
+
+
+
 
 # if __name__ == "__main__":
     # processed_starting_point = process_add_itinerary_start_and_destination(starting_point)
