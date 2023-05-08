@@ -58,13 +58,13 @@ Itinerary_HTTPResponse_400_DETAIL = {
     "INVALID_DATETIME_FORMAT":{"status code":400, "message":"Invalid created_time format"},
     "INVALID_ITINERARY_NAME": {"status code":400, "message":"Invalid itinerary name: it can't be an empty string"},
     "INVALID_DATETIME_EMPTY_STRING":{"status code":400, "message":"Invalid created_time: it can't be an empty string"},
-    "USER_HAS_NO_ITINERARY":{"status code": 400, "message":"User has no itinerary"},
     "SINGLE_ITINERARY_NOT_FOUND":{"status code":400, "message":"Single itinerary not found"}
 }
 
 Itinerary_HTTPResponse_200_DETAIL = {
     "Add_ITINERARY_SUCCESS": {"status code": 200, "message":"Added itinerary successfully"},
-    "GET_A_USER_ITINERARIES_SUCCESS":{"status code": 200, "message":"Successfully get a user's all itineraries"}
+    "GET_A_USER_ITINERARIES_SUCCESS":{"status code": 200, "message":"Successfully get a user's all itineraries"},
+    "USER_HAS_NO_ITINERARY": {"status code": 201, "message": "User has no itinerary"}
 }
 
 
@@ -114,7 +114,7 @@ def get_a_user_itineraries(user_email: str):
         all_itineraries = util.get_a_user_itineraries_from_database(user_email)
         return_payload = util.process_a_user_all_itineraries_response(all_itineraries)
         if not return_payload:
-            return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["USER_HAS_NO_ITINERARY"])
+            return JSONResponse(status_code=201, content=Itinerary_HTTPResponse_200_DETAIL["USER_HAS_NO_ITINERARY"])
         else:
             return_response = Itinerary_HTTPResponse_200_DETAIL["GET_A_USER_ITINERARIES_SUCCESS"]
             return_response["all itineraries"] = return_payload
