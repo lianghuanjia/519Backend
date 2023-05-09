@@ -1,9 +1,11 @@
 from sqlalchemy import Column, String, Integer, DATETIME, ForeignKey
 from sqlalchemy.orm import declarative_base
 
+"""
+Use this file to define the tables configured in the database
+"""
 
 Base = declarative_base()
-
 
 
 class User(Base):
@@ -27,4 +29,3 @@ class Itinerary(Base):
     places = Column(String(2000))
     itinerary_name = Column(String(600), nullable=True)
     created_time = Column(DATETIME, nullable=True)
-

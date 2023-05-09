@@ -2,6 +2,10 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
+"""
+Use this module to define pydantic model that are used in the FastAPI post endpoints
+"""
+
 class AddUserItem(BaseModel):
     email: str
     username: str

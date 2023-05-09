@@ -12,6 +12,13 @@ from database import get_session
 from itinerary import check_one_place_format, check_places_format, check_datetime
 import API_path_values
 
+
+'''
+File description:
+Use it to write FastAPI endpoints to handle HTTP requests.
+'''
+
+
 app = FastAPI()
 
 User_HTTPResponse_400_DETAIL = {
@@ -29,6 +36,11 @@ User_HTTPResponse_200_DETAIL = {
 
 @app.post("/user/add-user/")
 def add_user_to_database(item: AddUserItem):
+    """
+    Use it to add a user to the database
+    :param item: The item that represents a user's information that will be added to the database
+    :return: 200, 400 HTTPResponse or 500 HTTPException
+    """
     try:
         if item.email == "":
             return JSONResponse(status_code=400, content=User_HTTPResponse_400_DETAIL["MISSING_EMAIL"])
@@ -47,8 +59,6 @@ def add_user_to_database(item: AddUserItem):
         delete_user_in_database(item.email)
         raise HTTPException(status_code=500, detail='Internal Error')
 
-
-# "":{"status code": 400,"message":""},
 
 Itinerary_HTTPResponse_400_DETAIL = {
     "MISSING_USER_EMAIL": {"status code": 400, "message": "Missing field: user email"},
@@ -71,7 +81,6 @@ Itinerary_HTTPResponse_400_DETAIL = {
                                 "message": "Unsupported travel mode. It can only be one of the: 'driving', 'walking', 'bicycling', and 'transit'"}
 }
 
-# travelling_modes = ["driving", "walking", "bicycling", "transit"]
 
 Itinerary_HTTPResponse_200_DETAIL = {
     "Add_ITINERARY_SUCCESS": {"status code": 200, "message": "Added itinerary successfully"},
@@ -84,6 +93,11 @@ Itinerary_HTTPResponse_200_DETAIL = {
 
 @app.post(API_path_values.ADD_ITINERARY_PATH)
 def add_itinerary_to_database(item: AddItineraryItem):
+    """
+    Use it to add an itinerary to database.
+    :param item: the item that represents the added itinerary
+    :return: 200, 400 HTTPResponse or 500 HTTPException
+    """
     try:
         if item.user_email == "":
             return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["MISSING_USER_EMAIL"])
@@ -128,6 +142,11 @@ def add_itinerary_to_database(item: AddItineraryItem):
 
 @app.get(API_path_values.GET_A_USER_ITINERARIES)
 def get_a_user_itineraries(user_email: str):
+    """
+    Use it to get a user's all itineraries.
+    :param user_email: The user's user_email to identify the user
+    :return: 200, 400 HTTPResponse or 500 HTTPException
+    """
     try:
         all_itineraries = util.get_a_user_itineraries_from_database(user_email)
         return_payload = util.process_a_user_all_itineraries_response(all_itineraries)
@@ -144,6 +163,12 @@ def get_a_user_itineraries(user_email: str):
 
 @app.get(API_path_values.GET_ONE_ITINERARY)
 def get_one_itinerary_and_its_optimized_path(str_itinerary_id: str, travel_mode: str):
+    """
+    Use it to get one specific itinerary and the optimized path to follow to visit all the places in that itinerary within the shortest time
+    :param str_itinerary_id: The itinerary's id
+    :param travel_mode:  The travel mode the user prefers
+    :return: 200, 400 HTTPResponse or 500 HTTPException
+    """
     try:
         itinerary_id = int(str_itinerary_id)
         itinerary = util.get_an_itinerary_from_database(itinerary_id)
