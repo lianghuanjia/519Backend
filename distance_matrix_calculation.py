@@ -104,10 +104,10 @@ def get_directions_for_display(optimized_route, destination_info, location_info_
     last_place_in_route_lat_long = str(location_info_list[last_place_in_route_index][1]) + ", " + str(
         location_info_list[last_place_in_route_index][2])
     destination_lat_long = str(destination_info[1]) + ", " + str(destination_info[2])
-    print("+=========")
-    print(last_place_in_route_lat_long)
-    print(destination_lat_long)
-    print("+=========")
+    # print("+=========")
+    # print(last_place_in_route_lat_long)
+    # print(destination_lat_long)
+    # print("+=========")
     directions_results_for_whole_itinerary.append(get_direction_from_one_place_to_another(last_place_in_route_lat_long, destination_lat_long, travel_mode))
     return directions_results_for_whole_itinerary
 
@@ -119,7 +119,7 @@ def get_locations_and_mode_to_get_display_result(locations, mode):
     matrix = get_data_set(all_but_last, mode)
     # print(matrix)
     route = get_optimized_route(matrix)
-    print("Got the route: " + str(route))
+    # print("Got the route: " + str(route))
     # GET THE DIRECTIONS FOR THE ROUTE AND WITH THE DESTINATION INSIDE:
     directions_list = get_directions_for_display(route, destination_info, locations, mode)
     # last place from the optimized route
@@ -134,17 +134,17 @@ def get_locations_and_mode_to_get_display_result(locations, mode):
     return place_and_duration, directions_list
 
 
-if __name__ == "__main__":
-    starting_point = ('Monmouth Street Park', 42.3453547, -71.1068336)
-    # place1 = ('Museum of Fine Arts, Boston', 42.339381, -71.094048)
-    place1 = ('Monmouth Street Park', 42.3453547, -71.1068336)
-    # place2 = ('Caffè Bene', 42.3423715, -71.0847774)
-    # destination = ('Gabel Museum of Archaeology', 42.3501187, -71.1037303)
-    destination = ('Monmouth Street Park', 42.3453547, -71.1068336)
-    locations = [starting_point, place1, destination]
-    mode = "driving"
-    result = get_locations_and_mode_to_get_display_result(locations, mode)
-    print(result)
+# if __name__ == "__main__":
+#     starting_point = ('Monmouth Street Park', 42.3453547, -71.1068336)
+#     # place1 = ('Museum of Fine Arts, Boston', 42.339381, -71.094048)
+#     place1 = ('Monmouth Street Park', 42.3453547, -71.1068336)
+#     # place2 = ('Caffè Bene', 42.3423715, -71.0847774)
+#     # destination = ('Gabel Museum of Archaeology', 42.3501187, -71.1037303)
+#     destination = ('Monmouth Street Park', 42.3453547, -71.1068336)
+#     locations = [starting_point, place1, destination]
+#     mode = "driving"
+#     result = get_locations_and_mode_to_get_display_result(locations, mode)
+#     print(result)
 # data_model = [[0, 442, 574, 480],
 #               [442, 0, 307, 561],
 #               [574, 307, 0, 574],

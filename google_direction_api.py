@@ -30,7 +30,7 @@ def get_direction_from_one_place_to_another(origin, destination, mode):
     # Parse the JSON response
     result = response.json()
     if result['status'] == 'OK':
-        print("OK")
+        # print("OK")
     # Extract the steps from the first route
         route = result["routes"][0]
         legs = route["legs"]
