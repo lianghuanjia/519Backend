@@ -20,7 +20,9 @@ in an AWS EC2 Instance.
 2. Google Map Direction API
 
 ### ChatGPT Usage:
-1. Asked it questions about SQLAlchemy usage
+1. Asked it questions about some SQLAlchemy operations
 2. Asked it questions about how to use the Google Map Distance Matrix API with mode
-3. Asked it some Python terminal commands, such as how to load the installed requirements in the app to the 
+3. Asked it how to use the Google Direction APIs to get direction steps from one place to another with specific travel 
+mode
+4. Asked it some Python terminal commands, such as how to load the installed requirements in the app to the 
 requirements.txt

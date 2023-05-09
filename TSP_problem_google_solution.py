@@ -3,6 +3,12 @@
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
 
+"""
+Reference: This TSP problem solution is adjusted from Google Map's TSP solution: 
+https://developers.google.com/optimization/routing/tsp  
+"""
+
+
 
 def create_data_model(data_matrix):
     """Stores the data for the problem."""

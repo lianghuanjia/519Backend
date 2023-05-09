@@ -11,7 +11,10 @@ api_key = GOOGLE_MAP_API_KEY
 
 # Make an HTTP request to the Directions API
 
-
+'''
+ChatGPT usage: Asked ChatGPT how to get the direction from one place to another given those places' latitudes and 
+longitude. Also asked it how to use Python regular expression to trim the return answers
+'''
 def get_direction_from_one_place_to_another(origin, destination, mode):
     """
     Use it to get all the directions steps from one place to another

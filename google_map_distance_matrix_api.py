@@ -34,6 +34,10 @@ def convert_seconds(seconds):
     return result
 
 
+'''
+ChatGPT usage: Asked ChatGPT how to get the travel time taken to travel from place1 to place2 given their latitudes and 
+longitudes, and the travel mode.
+'''
 def calculate_traveling_time_between_two_places(place1, place2, mode):
     """
     Use it to calculate the traveling time between 2 places by entering the two places' latitudes and longitudes and
