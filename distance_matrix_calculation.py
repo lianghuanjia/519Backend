@@ -1,6 +1,7 @@
 import numpy as np
 from google_map_distance_matrix_api import calculate_traveling_time_between_two_places, convert_seconds
 from TSP_problem_google_solution import get_optimized_route
+from google_direction_api import get_direction_from_one_place_to_another
 
 """
 Use this file to get the optimized route in an itinerary
@@ -84,26 +85,53 @@ def get_display_result_for_last_place_to_destination(last_place_info, destinatio
     return last_place_info[0], str(convert_seconds(duration))
 
 
+def get_directions_for_display(optimized_route, destination_info, location_info_list, travel_mode):
+    # First get the directions for the places in the optimized route
+    directions_results_for_whole_itinerary = []
+    for i in range(len(optimized_route) - 1):
+        place_index = optimized_route[i]
+        starting_place = location_info_list[place_index]
+        end_place_index = optimized_route[i + 1]
+        end_place = location_info_list[end_place_index]
+        starting_place_lat_and_long = str(starting_place[1]) + ", " + str(starting_place[2])
+        end_place_lat_and_long = str(end_place[1]) + ", " + str(end_place[2])
+        direction = get_direction_from_one_place_to_another(starting_place_lat_and_long, end_place_lat_and_long,
+                                                            travel_mode)
+        directions_results_for_whole_itinerary.append(direction)
+
+    # Then add the last place in the optimized route's direction to the destination_info
+    last_place_in_route_index = optimized_route[-1]
+    last_place_in_route_lat_long = str(location_info_list[last_place_in_route_index][1]) + ", " + str(
+        location_info_list[last_place_in_route_index][2])
+    destination_lat_long = str(destination_info[1]) + ", " + str(destination_info[2])
+    print("+=========")
+    print(last_place_in_route_lat_long)
+    print(destination_lat_long)
+    print("+=========")
+    directions_results_for_whole_itinerary.append(get_direction_from_one_place_to_another(last_place_in_route_lat_long, destination_lat_long, travel_mode))
+    return directions_results_for_whole_itinerary
+
 def get_locations_and_mode_to_get_display_result(locations, mode):
-    # TO DO: Need to check if the locations list is empty
+    # TO DO: Need to check if the locations list is empty: No need to check.
     destination_info = locations[-1]
     all_but_last = locations[:-1]
-    print(all_but_last)
+    # print(all_but_last)
     matrix = get_data_set(all_but_last, mode)
-    print(matrix)
+    # print(matrix)
     route = get_optimized_route(matrix)
     print("Got the route: " + str(route))
-
+    # GET THE DIRECTIONS FOR THE ROUTE AND WITH THE DESTINATION INSIDE:
+    directions_list = get_directions_for_display(route, destination_info, locations, mode)
     # last place from the optimized route
     last_place_index = route[-1]
-    result = extract_information(all_but_last, route, matrix)
+    place_and_duration = extract_information(all_but_last, route, matrix)
     # print(result)
-    print(locations[last_place_index])
-    print(all_but_last[last_place_index])
-    result.append(
+    # print(locations[last_place_index])
+    # print(all_but_last[last_place_index])
+    place_and_duration.append(
         get_display_result_for_last_place_to_destination(all_but_last[last_place_index], destination_info, mode))
-    result.append((destination_info[0], str(0)))
-    return result
+    place_and_duration.append((destination_info[0], str(0)))
+    return place_and_duration, directions_list
 
 
 if __name__ == "__main__":

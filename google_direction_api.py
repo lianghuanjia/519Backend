@@ -12,7 +12,7 @@ api_key = GOOGLE_MAP_API_KEY
 
 # Make an HTTP request to the Directions API
 
-def get_direction_from_one_place_to_another(one_place, another_place, traveling_mode):
+def get_direction_from_one_place_to_another(origin, destination, mode):
     """
 
     :param one_place:
@@ -29,29 +29,37 @@ def get_direction_from_one_place_to_another(one_place, another_place, traveling_
 
     # Parse the JSON response
     result = response.json()
-
+    if result['status'] == 'OK':
+        print("OK")
     # Extract the steps from the first route
-    route = result["routes"][0]
-    legs = route["legs"]
-    steps = [step for leg in legs for step in leg["steps"]]
+        route = result["routes"][0]
+        legs = route["legs"]
+        steps = [step for leg in legs for step in leg["steps"]]
 
-    directions = []
-    for i, step in enumerate(steps):
-        step_str = f"Step {i + 1}: {step['html_instructions']}"
-        # get rid of <div ...> and </div>
-        deleted_div_step = re.sub(r'<div.*?>|</div>', '', step_str)
-        # get rid of <b> </b>
-        deleted_b_step = re.sub(r'<\/?b>', '', deleted_div_step)
-        directions.append(deleted_b_step)
-    return directions
+        directions = []
+        for i, step in enumerate(steps):
+            step_str = f"Step {i + 1}: {step['html_instructions']}"
+            # get rid of <div ...> and </div>
+            deleted_div_step = re.sub(r'<div.*?>|</div>', '', step_str)
+            # get rid of <b> </b>
+            deleted_b_step = re.sub(r'<\/?b>', '', deleted_div_step)
+            deleted_wbr_step = re.sub(r'<wbr\s?\/?>', ' ', deleted_b_step)
+            directions.append(deleted_wbr_step)
+        return directions
+    else:
+        return []
 
 
 if __name__ == "__main__":
     # Define the starting and ending addresses
-    origin = '42.3645558,-71.1359136'
-    destination = "42.3645558,-71.1359136"  # "42.34993389999999, -71.1027624"
+    origin_m = '42.3645558,-71.1359136' #  Worked: 42.3645558,-71.1359136
+    destination_m = "42.34993389999999, -71.1027624"  # "42.34993389999999, -71.1027624"
+
+    #42.3465259, 42.3465259
+    #42.3493136, -71.0781875
+
 
     # Define the mode of transportation
     mode = "driving"
-    d = get_direction_from_one_place_to_another(origin, destination, mode)
+    d = get_direction_from_one_place_to_another(origin_m, destination_m, mode)
     print(d)

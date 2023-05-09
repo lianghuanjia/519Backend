@@ -3,7 +3,7 @@ from database_table_definition import User, Itinerary
 from datetime import datetime
 from itinerary import process_starting_point_and_destination, process_places
 from distance_matrix_calculation import get_locations_and_mode_to_get_display_result
-
+from google_direction_api import get_direction_from_one_place_to_another
 import ast
 
 
@@ -161,8 +161,8 @@ def get_optimized_order(travel_mode, db_itinerary):
     # print(location_list)
     # Finish organizing the locations so that they are ready to be
     # processed in the helper function to get optimized routes
-    display_info = get_locations_and_mode_to_get_display_result(location_list, travel_mode)
-    return display_info
+    place_and_duration_info, direction_info = get_locations_and_mode_to_get_display_result(location_list, travel_mode)
+    return place_and_duration_info, direction_info
 
 
 # if __name__ == "__main__":

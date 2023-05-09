@@ -177,12 +177,13 @@ def get_one_itinerary_and_its_optimized_path(str_itinerary_id: str, travel_mode:
                                 content=Itinerary_HTTPResponse_400_DETAIL["SINGLE_ITINERARY_NOT_FOUND"])
         if travel_mode not in values.travelling_modes:
             return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["UNSUPPORTED_TRAVEL_MODE"])
-        display_result = util.get_optimized_order(travel_mode, itinerary)
-        if not display_result:
+        place_and_durations, directions_list = util.get_optimized_order(travel_mode, itinerary)
+        if not place_and_durations:
             return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["NO_DISPLAY_RESULT"])
         else:
             return_content = Itinerary_HTTPResponse_200_DETAIL["GET_ITINERARY__OPTIMIZED_ROUTE_SUCCESS"]
-            return_content["route"] = display_result
+            return_content["route"] = place_and_durations
+            return_content["directions"] = directions_list
             return JSONResponse(status_code=200, content=return_content)
     except Exception as err:
         print(err)
