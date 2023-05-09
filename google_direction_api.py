@@ -52,17 +52,17 @@ def get_direction_from_one_place_to_another(origin, destination, mode):
     else:
         return []
 
-
-if __name__ == "__main__":
-    # Define the starting and ending addresses
-    origin_m = '42.3645558,-71.1359136' #  Worked: 42.3645558,-71.1359136
-    destination_m = "42.34993389999999, -71.1027624"  # "42.34993389999999, -71.1027624"
-
-    #42.3465259, 42.3465259
-    #42.3493136, -71.0781875
-
-
-    # Define the mode of transportation
-    mode = "driving"
-    d = get_direction_from_one_place_to_another(origin_m, destination_m, mode)
-    print(d)
+#
+# if __name__ == "__main__":
+#     # Define the starting and ending addresses
+#     origin_m = '42.3645558,-71.1359136' #  Worked: 42.3645558,-71.1359136
+#     destination_m = "42.34993389999999, -71.1027624"  # "42.34993389999999, -71.1027624"
+#
+#     #42.3465259, 42.3465259
+#     #42.3493136, -71.0781875
+#
+#
+#     # Define the mode of transportation
+#     mode = "driving"
+#     d = get_direction_from_one_place_to_another(origin_m, destination_m, mode)
+#     print(d)

@@ -6,6 +6,11 @@ from api_application import app
 import API_path_values
 import json
 
+
+"""
+Use this module to write tests that are related to itinerary API endpoints
+"""
+
 client = TestClient(app)
 
 CORRECT_ADD_ITINERARY_INPUT = {

@@ -1,5 +1,9 @@
 from itinerary import *
 
+"""
+Use this module to write tests for the helper methods written in the itinerary.py 
+"""
+
 
 def test_check_correct_start_location_format():
     correct_start_location = "['Your Location', '42.3455898', '-71.0887769']"

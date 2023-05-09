@@ -86,6 +86,14 @@ def get_display_result_for_last_place_to_destination(last_place_info, destinatio
 
 
 def get_directions_for_display(optimized_route, destination_info, location_info_list, travel_mode):
+    """
+    Use it to get the direction steps between each places for the detailed itinerary page
+    :param optimized_route: The list that contains the optimized route. It contains the location index order to travel
+    :param destination_info: The destination information in list format
+    :param location_info_list: The list that contains all the information of locations in one itinerary
+    :param travel_mode: The mode user prefers to travel
+    :return:
+    """
     # First get the directions for the places in the optimized route
     directions_results_for_whole_itinerary = []
     for i in range(len(optimized_route) - 1):
@@ -108,10 +116,18 @@ def get_directions_for_display(optimized_route, destination_info, location_info_
     # print(last_place_in_route_lat_long)
     # print(destination_lat_long)
     # print("+=========")
-    directions_results_for_whole_itinerary.append(get_direction_from_one_place_to_another(last_place_in_route_lat_long, destination_lat_long, travel_mode))
+    directions_results_for_whole_itinerary.append(
+        get_direction_from_one_place_to_another(last_place_in_route_lat_long, destination_lat_long, travel_mode))
     return directions_results_for_whole_itinerary
 
+
 def get_locations_and_mode_to_get_display_result(locations, mode):
+    """
+    Use it to get the display results for the detailed itinerary page
+    :param locations: The location that contains all the places in that itinerary
+    :param mode: The user's preferred travel mode
+    :return:
+    """
     # TO DO: Need to check if the locations list is empty: No need to check.
     destination_info = locations[-1]
     all_but_last = locations[:-1]
@@ -132,7 +148,6 @@ def get_locations_and_mode_to_get_display_result(locations, mode):
         get_display_result_for_last_place_to_destination(all_but_last[last_place_index], destination_info, mode))
     place_and_duration.append((destination_info[0], str(0)))
     return place_and_duration, directions_list
-
 
 # if __name__ == "__main__":
 #     starting_point = ('Monmouth Street Park', 42.3453547, -71.1068336)
