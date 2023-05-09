@@ -38,7 +38,10 @@ def get_direction_from_one_place_to_another(origin, destination, mode):
 
         directions = []
         for i, step in enumerate(steps):
-            step_str = f"Step {i + 1}: {step['html_instructions']}"
+            if step['html_instructions'] == "Head":
+                step_str = f"Step {i + 1}: Stay at your location"
+            else:
+                step_str = f"Step {i + 1}: {step['html_instructions']}"
             # get rid of <div ...> and </div>
             deleted_div_step = re.sub(r'<div.*?>|</div>', '', step_str)
             # get rid of <b> </b>
