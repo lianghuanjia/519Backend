@@ -104,11 +104,14 @@ def get_optimized_order(travel_mode, db_itinerary):
     """
     starting_point = (starting_point_info['place_name'], float(starting_point_info['latitude']), float(starting_point_info['longitude']))
     location_list = [starting_point]
+
     for each_place in places_info_list:
         location_list.append((each_place['place_name'], float(each_place['latitude']), float(each_place['longitude'])))
 
     destination_point = (destination_info['place_name'], float(destination_info['latitude']), float(destination_info['longitude']))
     location_list.append(destination_point)
+    print("===location list====")
+    print(location_list)
     #Finish organizing the locations and they are ready to be processed in the helper function to get optimized routes
     display_info = get_locations_and_mode_to_get_display_result(location_list, travel_mode)
     return display_info

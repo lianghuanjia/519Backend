@@ -27,10 +27,12 @@ def get_data_set(location_list, travel_mode):
 
 
 def extract_information(location_list, route_list, duration_matrix):
+    # print("===route_list ====")
+    # print(route_list)
     result = []
-    for i in range(len(route_list) - 1):
-        place_name = location_list[i][0]
+    for i in range(len(route_list) - 1): #i=0,1,2
         current_place_index = route_list[i]
+        place_name = location_list[current_place_index][0]
         next_place_index = route_list[i + 1]
         time_to_next_place_in_second = duration_matrix[current_place_index][next_place_index]
         time_to_next_place_str = convert_seconds(time_to_next_place_in_second)
@@ -52,14 +54,20 @@ def get_locations_and_mode_to_get_display_result(locations, mode):
     # TO DO: Need to check if the locations list is empty
     destination_info = locations[-1]
     all_but_last = locations[:-1]
+    print(all_but_last)
     matrix = get_data_set(all_but_last, mode)
     print(matrix)
     route = get_optimized_route(matrix)
     print("Got the route: "+str(route))
+
+
+    # last place from the optimized route
     last_place_index = route[-1]
-    result = extract_information(locations, route, matrix)
+    result = extract_information(all_but_last, route, matrix)
     # print(result)
-    result.append(get_display_result_for_last_place_to_destination(locations[last_place_index], destination_info, mode))
+    print(locations[last_place_index])
+    print(all_but_last[last_place_index])
+    result.append(get_display_result_for_last_place_to_destination(all_but_last[last_place_index], destination_info, mode))
     result.append((destination_info[0], str(0)))
     return result
 
