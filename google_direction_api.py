@@ -5,16 +5,16 @@ import re
 # Replace YOUR_API_KEY with your actual API key
 api_key = GOOGLE_MAP_API_KEY
 
-
 # ['Soldiers Field Road', '42.3645558', '-71.1359136']
 # ['655 Commonwealth Ave', '42.34993389999999', '-71.1027624']
 
 
 # Make an HTTP request to the Directions API
 
+
 def get_direction_from_one_place_to_another(origin, destination, mode):
     """
-
+    Use it to get all the directions steps from one place to another
     :param one_place:
         A string that contains latitude and longitude, with "," in the middle:
         e.g.:'42.3645558,-71.1359136'
@@ -31,7 +31,7 @@ def get_direction_from_one_place_to_another(origin, destination, mode):
     result = response.json()
     if result['status'] == 'OK':
         # print("OK")
-    # Extract the steps from the first route
+        # Extract the steps from the first route
         route = result["routes"][0]
         legs = route["legs"]
         steps = [step for leg in legs for step in leg["steps"]]
