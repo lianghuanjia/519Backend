@@ -8,6 +8,7 @@
 
 ### Architecture
 
+<img width="567" alt="Screenshot 2023-05-09 at 2 46 26 PM" src="https://github.com/lianghuanjia/501Backend/assets/36748450/97c139ba-59b2-430b-bdb5-095cd5b5d519">
 
 Brief introduction:
 The application uses FastAPI framework, built APIs using Python, and do CRUD operations to AWS RDS MySQL database 
