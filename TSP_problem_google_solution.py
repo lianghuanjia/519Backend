@@ -70,9 +70,9 @@ def get_optimized_route(data_matrix):
         return place_order
 
 
-if __name__ == '__main__':
-    matrix = [[0, 442, 574, 480],
-              [442, 0, 307, 561],
-              [574, 307, 0, 574],
-              [480, 561, 574, 0]]
-    get_optimized_route(data_matrix=matrix)
+# if __name__ == '__main__':
+#     matrix = [[0, 442, 574, 480],
+#               [442, 0, 307, 561],
+#               [574, 307, 0, 574],
+#               [480, 561, 574, 0]]
+#     get_optimized_route(data_matrix=matrix)

@@ -35,12 +35,16 @@ def calculate_traveling_time_between_two_places(place1, place2, mode):
         api_key = f"&key={API_KEY}"
         mode = f"&mode={mode}"
         request_url = base_url+mode+api_key
-        print(request_url)
         response = requests.get(request_url)
         data = json.loads(response.text)
         #distance = data['rows'][0]['elements'][0]['distance']['text']
+        # print("======data=====")
+        # print(data)
+        if data['rows'][0]['elements'][0]['status'] == 'ZERO_RESULTS':
+            return 0
         traveling_time = data['rows'][0]['elements'][0]['duration']['value']
         # print("time in second: "+ str(traveling_time))
+
         return traveling_time
     except Exception as err:
         raise err

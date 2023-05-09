@@ -109,5 +109,18 @@ def get_optimized_order(travel_mode, db_itinerary):
 
     destination_point = (destination_info['place_name'], float(destination_info['latitude']), float(destination_info['longitude']))
     location_list.append(destination_point)
+    #Finish organizing the locations and they are ready to be processed in the helper function to get optimized routes
     display_info = get_locations_and_mode_to_get_display_result(location_list, travel_mode)
     return display_info
+
+
+if __name__ == "__main__":
+    starting_point = ('Boston Public Library - Central Library', 42.3493136, -71.0781875)
+    # place1 = ('Museum of Fine Arts, Boston', 42.339381, -71.094048)
+    place2 = ('Boston Public Library - Central Library', 42.3493136, -71.0781875)
+    destination = ('Boston Public Library - Central Library', 42.3493136, -71.0781875)
+    loc_list = [starting_point, place2, destination]
+    mode = "transit"
+    display_info = get_locations_and_mode_to_get_display_result(loc_list, mode)
+    print(display_info)
+

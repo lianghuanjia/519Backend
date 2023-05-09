@@ -24,7 +24,7 @@ class Itinerary(Base):
     user_email = Column(String(100), ForeignKey("user.email"))
     starting_point = Column(String(300))
     destination = Column(String(300))
-    places = Column(String(2000), nullable=True)
+    places = Column(String(2000))
     itinerary_name = Column(String(600), nullable=True)
     created_time = Column(DATETIME, nullable=True)
 

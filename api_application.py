@@ -1,6 +1,8 @@
+import traceback
 from traceback import print_exc
 
 import util
+import values
 from schemas import AddUserItem, AddItineraryItem
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
@@ -10,20 +12,19 @@ from database import get_session
 from itinerary import check_one_place_format, check_places_format, check_datetime
 import API_path_values
 
-
 app = FastAPI()
 
 User_HTTPResponse_400_DETAIL = {
-    "INVALID_STARTING_POINT":{"status code":400, "message":"Starting point has incorrect format. It needs to be in this format: "},
-    "MISSING_EMAIL":{"status code":400, "message":"Missing required field: user email"},
-    "MISSING_USERNAME":{"status code":400, "message":"Missing required field: username"},
-    "USER_EXISTS_ALREADY":{"status code":400, "message":"User exists already"}
+    "INVALID_STARTING_POINT": {"status code": 400,
+                               "message": "Starting point has incorrect format. It needs to be in this format: "},
+    "MISSING_EMAIL": {"status code": 400, "message": "Missing required field: user email"},
+    "MISSING_USERNAME": {"status code": 400, "message": "Missing required field: username"},
+    "USER_EXISTS_ALREADY": {"status code": 400, "message": "User exists already"}
 }
 
 User_HTTPResponse_200_DETAIL = {
-    "Add_ITINERARY_SUCCESS":{"status code":200, "message":"Added itinerary successfully"}
+    "Add_ITINERARY_SUCCESS": {"status code": 200, "message": "Added itinerary successfully"}
 }
-
 
 
 @app.post("/user/add-user/")
@@ -46,28 +47,38 @@ def add_user_to_database(item: AddUserItem):
         delete_user_in_database(item.email)
         raise HTTPException(status_code=500, detail='Internal Error')
 
-#"":{"status code": 400,"message":""},
+
+# "":{"status code": 400,"message":""},
 
 Itinerary_HTTPResponse_400_DETAIL = {
-    "MISSING_USER_EMAIL":{"status code": 400,"message":"Missing field: user email"},
-    "MISSING_STARTING_POINT":{"status code": 400,"message":"Missing field: starting point"},
-    "MISSING_DESTINATION":{"status code": 400, "message":"Missing field: destination"},
-    "MISSING_PLACE(S)": {"status code":400, "message":"Missing field: places"},
-    "INVALID_STARTING_POINT_FORMAT":{"status code":400, "message":"Invalid starting point format. It should be: ['PLACE NAME', 'LATITUDE', 'LONGITUDE']"},
-    "INVALID_DESTINATION_FORMAT":{"status code":400,"message":"Invalid destination format. It should be: ['PLACE NAME', 'LATITUDE', 'LONGITUDE']"},
-    "INVALID_PLACES_FORMAT":{"status code":400, "message":"Invalid places format. The amount of information should be multiplication of 3, and each place follows the format of:'PLACE NAME', 'LATITUDE', 'LONGITUDE' "},
-    "INVALID_DATETIME_FORMAT":{"status code":400, "message":"Invalid created_time format"},
-    "INVALID_ITINERARY_NAME": {"status code":400, "message":"Invalid itinerary name: it can't be an empty string"},
-    "INVALID_DATETIME_EMPTY_STRING":{"status code":400, "message":"Invalid created_time: it can't be an empty string"},
-    "SINGLE_ITINERARY_NOT_FOUND":{"status code":400, "message":"Single itinerary not found"},
-    "NO_DISPLAY_RESULT": {"status code": 400, "message": "Unable to calculate optimized solution"}
+    "MISSING_USER_EMAIL": {"status code": 400, "message": "Missing field: user email"},
+    "MISSING_STARTING_POINT": {"status code": 400, "message": "Missing field: starting point"},
+    "MISSING_DESTINATION": {"status code": 400, "message": "Missing field: destination"},
+    "MISSING_PLACE(S)": {"status code": 400, "message": "Missing field: places"},
+    "INVALID_STARTING_POINT_FORMAT": {"status code": 400,
+                                      "message": "Invalid starting point format. It should be: ['PLACE NAME', 'LATITUDE', 'LONGITUDE']"},
+    "INVALID_DESTINATION_FORMAT": {"status code": 400,
+                                   "message": "Invalid destination format. It should be: ['PLACE NAME', 'LATITUDE', 'LONGITUDE']"},
+    "INVALID_PLACES_FORMAT": {"status code": 400,
+                              "message": "Invalid places format. The amount of information should be multiplication of 3, and each place follows the format of:'PLACE NAME', 'LATITUDE', 'LONGITUDE' "},
+    "INVALID_DATETIME_FORMAT": {"status code": 400, "message": "Invalid created_time format"},
+    "INVALID_ITINERARY_NAME": {"status code": 400, "message": "Invalid itinerary name: it can't be an empty string"},
+    "INVALID_DATETIME_EMPTY_STRING": {"status code": 400,
+                                      "message": "Invalid created_time: it can't be an empty string"},
+    "SINGLE_ITINERARY_NOT_FOUND": {"status code": 400, "message": "Single itinerary not found"},
+    "NO_DISPLAY_RESULT": {"status code": 400, "message": "Unable to calculate optimized solution"},
+    "UNSUPPORTED_TRAVEL_MODE": {"status code": 400,
+                                "message": "Unsupported travel mode. It can only be one of the: 'driving', 'walking', 'bicycling', and 'transit'"}
 }
 
+# travelling_modes = ["driving", "walking", "bicycling", "transit"]
+
 Itinerary_HTTPResponse_200_DETAIL = {
-    "Add_ITINERARY_SUCCESS": {"status code": 200, "message":"Added itinerary successfully"},
-    "GET_A_USER_ITINERARIES_SUCCESS":{"status code": 200, "message":"Successfully get a user's all itineraries"},
+    "Add_ITINERARY_SUCCESS": {"status code": 200, "message": "Added itinerary successfully"},
+    "GET_A_USER_ITINERARIES_SUCCESS": {"status code": 200, "message": "Successfully get a user's all itineraries"},
     "USER_HAS_NO_ITINERARY": {"status code": 201, "message": "User has no itinerary"},
-    "GET_ITINERARY__OPTIMIZED_ROUTE_SUCCESS": {"status code":200, "message":"Successfully get an itinerary's optimized route"}
+    "GET_ITINERARY__OPTIMIZED_ROUTE_SUCCESS": {"status code": 200,
+                                               "message": "Successfully get an itinerary's optimized route"}
 }
 
 
@@ -83,19 +94,25 @@ def add_itinerary_to_database(item: AddItineraryItem):
         if item.places == "":
             return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["MISSING_PLACE(S)"])
         if not check_one_place_format(item.starting_point):
-            return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["INVALID_STARTING_POINT_FORMAT"])
+            return JSONResponse(status_code=400,
+                                content=Itinerary_HTTPResponse_400_DETAIL["INVALID_STARTING_POINT_FORMAT"])
         if not check_one_place_format(item.destination):
-            return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["INVALID_DESTINATION_FORMAT"])
+            return JSONResponse(status_code=400,
+                                content=Itinerary_HTTPResponse_400_DETAIL["INVALID_DESTINATION_FORMAT"])
         if not check_places_format(item.places):
             return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["INVALID_PLACES_FORMAT"])
         if item.itinerary_name == "":
             return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["INVALID_ITINERARY_NAME"])
         if item.created_time is not None:
             if item.created_time == "":
-                return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["INVALID_DATETIME_EMPTY_STRING"])
+                return JSONResponse(status_code=400,
+                                    content=Itinerary_HTTPResponse_400_DETAIL["INVALID_DATETIME_EMPTY_STRING"])
             if not check_datetime(item.created_time):
-                return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["INVALID_DATETIME_FORMAT"])
-        new_itinerary = Itinerary(user_email=item.user_email,starting_point=item.starting_point,destination=item.destination,places=item.places, itinerary_name=item.itinerary_name, created_time=item.created_time)
+                return JSONResponse(status_code=400,
+                                    content=Itinerary_HTTPResponse_400_DETAIL["INVALID_DATETIME_FORMAT"])
+        new_itinerary = Itinerary(user_email=item.user_email, starting_point=item.starting_point,
+                                  destination=item.destination, places=item.places, itinerary_name=item.itinerary_name,
+                                  created_time=item.created_time)
         db_session = get_session()
         db_session.add(new_itinerary)
         db_session.flush()
@@ -107,8 +124,6 @@ def add_itinerary_to_database(item: AddItineraryItem):
     except Exception as e:
         print_exc()
         raise HTTPException(status_code=500, detail='Internal Error')
-
-
 
 
 @app.get(API_path_values.GET_A_USER_ITINERARIES)
@@ -133,10 +148,10 @@ def get_one_itinerary_and_its_optimized_path(str_itinerary_id: str, travel_mode:
         itinerary_id = int(str_itinerary_id)
         itinerary = util.get_an_itinerary_from_database(itinerary_id)
         if itinerary is None:
-            return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["SINGLE_ITINERARY_NOT_FOUND"])
-        # print(itinerary_id)
-        # print(travel_mode)
-        # print(itinerary)
+            return JSONResponse(status_code=400,
+                                content=Itinerary_HTTPResponse_400_DETAIL["SINGLE_ITINERARY_NOT_FOUND"])
+        if travel_mode not in values.travelling_modes:
+            return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["UNSUPPORTED_TRAVEL_MODE"])
         display_result = util.get_optimized_order(travel_mode, itinerary)
         if not display_result:
             return JSONResponse(status_code=400, content=Itinerary_HTTPResponse_400_DETAIL["NO_DISPLAY_RESULT"])
@@ -146,4 +161,5 @@ def get_one_itinerary_and_its_optimized_path(str_itinerary_id: str, travel_mode:
             return JSONResponse(status_code=200, content=return_content)
     except Exception as err:
         print(err)
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail='Internal Error')
