@@ -1,4 +1,4 @@
-## 501Backend
+## PopUpTrip-AWS-Backend
 
 ### Introduction
  This is the backend development for 501 Team Not Yet's final project. It is a FastAPI application that have HTTP
